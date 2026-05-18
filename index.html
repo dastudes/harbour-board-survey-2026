@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FY26 Board Assessment Survey — The Harbour</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --teal:    #2a9d8f;
+      --pink:    #e76f9a;
+      --green:   #6abf69;
+      --gold:    #e9c46a;
+      --navy:    #1d2d44;
+      --slate:   #3d5a73;
+      --light:   #f5f7f6;
+      --white:   #ffffff;
+      --text:    #2c2c2c;
+      --muted:   #6b7280;
+      --border:  #dde3e0;
+      --shadow:  0 4px 24px rgba(29,45,68,0.10);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--light);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--navy);
+      padding: 2.5rem 2rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    header::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(42,157,143,.25) 0%, transparent 60%),
+                  linear-gradient(225deg, rgba(231,111,154,.20) 0%, transparent 55%);
+      pointer-events: none;
+    }
+    .header-accent {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 1.2rem;
+    }
+    .accent-bar {
+      height: 5px;
+      border-radius: 9999px;
+    }
+    .accent-bar:nth-child(1) { width: 40px; background: var(--pink); }
+    .accent-bar:nth-child(2) { width: 60px; background: var(--teal); }
+    .accent-bar:nth-child(3) { width: 30px; background: var(--green); }
+    .accent-bar:nth-child(4) { width: 50px; background: var(--gold); }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      color: var(--white);
+      font-size: clamp(1.7rem, 4vw, 2.6rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+    header p {
+      color: rgba(255,255,255,.65);
+      font-size: .95rem;
+      font-weight: 300;
+      margin-top: .5rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Layout ── */
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 2.5rem 1.25rem 4rem;
+    }
+
+    /* ── Instruction card ── */
+    .intro-card {
+      background: var(--white);
+      border-left: 5px solid var(--teal);
+      border-radius: 0 12px 12px 0;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: var(--shadow);
+      font-size: .95rem;
+      line-height: 1.7;
+      color: var(--slate);
+    }
+    .intro-card strong { color: var(--navy); }
+
+    /* ── Section headings ── */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin: 2.5rem 0 1.25rem;
+    }
+    .section-heading .pip {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pip-teal  { background: var(--teal); }
+    .pip-pink  { background: var(--pink); }
+    .pip-green { background: var(--green); }
+    .pip-gold  { background: var(--gold); }
+
+    .section-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Cards ── */
+    .card {
+      background: var(--white);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      box-shadow: var(--shadow);
+      transition: box-shadow .2s ease;
+    }
+    .card:focus-within { box-shadow: 0 6px 32px rgba(42,157,143,.18); }
+
+    .card label.q-label {
+      display: block;
+      font-size: .95rem;
+      font-weight: 500;
+      color: var(--navy);
+      line-height: 1.55;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Name field ── */
+    .name-input {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+    }
+    .name-input:focus { border-color: var(--teal); }
+
+    /* ── Likert scale ── */
+    .likert-row {
+      display: flex;
+      gap: .5rem;
+      flex-wrap: wrap;
+    }
+    .likert-option { flex: 1; min-width: 52px; }
+    .likert-option input[type="radio"] { display: none; }
+    .likert-option label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .35rem;
+      cursor: pointer;
+      padding: .6rem .25rem;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      transition: border-color .15s, background .15s, transform .1s;
+      user-select: none;
+    }
+    .likert-option label:hover { border-color: var(--teal); background: rgba(42,157,143,.05); }
+    .likert-option input:checked + label {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+      transform: translateY(-2px);
+    }
+    .likert-num {
+      font-size: 1.15rem;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .likert-desc {
+      font-size: .62rem;
+      text-align: center;
+      line-height: 1.2;
+      opacity: .75;
+    }
+    .likert-option input:checked + label .likert-desc { opacity: .9; }
+
+    /* Endpoint labels */
+    .likert-ends {
+      display: flex;
+      justify-content: space-between;
+      margin-top: .6rem;
+      font-size: .75rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* ── Yes/No ── */
+    .yn-row {
+      display: flex;
+      gap: .75rem;
+    }
+    .yn-option input[type="radio"] { display: none; }
+    .yn-option label {
+      padding: .55rem 1.5rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: .95rem;
+      transition: border-color .15s, background .15s;
+    }
+    .yn-option input:checked + label {
+      border-color: var(--teal);
+      background: var(--teal);
+      color: var(--white);
+    }
+
+    /* ── Text inputs ── */
+    .text-input, textarea {
+      width: 100%;
+      padding: .75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .95rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .2s;
+      resize: vertical;
+    }
+    .text-input:focus, textarea:focus { border-color: var(--teal); }
+    textarea { min-height: 110px; }
+
+    /* ── Values section ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    .value-card {
+      border-radius: 12px;
+      padding: 1.1rem 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .value-card::before {
+      content: attr(data-num);
+      position: absolute;
+      top: .6rem; right: .8rem;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      opacity: .12;
+      line-height: 1;
+      color: #fff;
+    }
+    .value-card h3 { font-size: .9rem; font-weight: 600; color: #fff; margin-bottom: .3rem; }
+    .value-card p  { font-size: .78rem; color: rgba(255,255,255,.82); line-height: 1.45; }
+
+    .vc-1 { background: linear-gradient(135deg, #e76f9a, #c45480); }
+    .vc-2 { background: linear-gradient(135deg, #2a9d8f, #1d7a70); }
+    .vc-3 { background: linear-gradient(135deg, #6abf69, #4da04c); }
+    .vc-4 { background: linear-gradient(135deg, #e9c46a, #c9a040); }
+    .vc-5 { background: linear-gradient(135deg, #a8b5c0, #7a90a0); }
+    .vc-6 { background: linear-gradient(135deg, #3d5a73, #2a3f54); }
+
+    /* ── Submit ── */
+    .submit-area {
+      margin-top: 2.5rem;
+      text-align: center;
+    }
+    .submit-btn {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 500;
+      padding: .9rem 3rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      letter-spacing: .04em;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      box-shadow: 0 4px 16px rgba(29,45,68,.25);
+    }
+    .submit-btn:hover { background: var(--teal); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(42,157,143,.35); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Status messages ── */
+    #status-msg {
+      margin-top: 1.25rem;
+      font-size: .95rem;
+      min-height: 1.5rem;
+      font-weight: 500;
+    }
+    #status-msg.error   { color: #c0392b; }
+    #status-msg.success { color: var(--teal); }
+    #status-msg.loading { color: var(--muted); }
+
+    /* ── Thank you screen ── */
+    #thankyou {
+      display: none;
+      text-align: center;
+      padding: 4rem 2rem;
+    }
+    #thankyou .checkmark {
+      width: 72px; height: 72px;
+      background: var(--teal);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem;
+      font-size: 2rem;
+      color: #fff;
+    }
+    #thankyou h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      color: var(--navy);
+      margin-bottom: .75rem;
+    }
+    #thankyou p { color: var(--muted); font-size: 1rem; line-height: 1.6; }
+
+    /* ── Required star ── */
+    .req { color: var(--pink); margin-left: 2px; }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: .8rem;
+    }
+
+    @media (max-width: 520px) {
+      .likert-row { gap: .3rem; }
+      .likert-num { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-accent">
+    <div class="accent-bar"></div>
+    <div class="accent-bar"></div>
+    <div class="accent-bar"></div>
+    <div class="accent-bar"></div>
+  </div>
+  <h1>FY26 Board Assessment Survey</h1>
+  <p>The Harbour — Annual Evaluation</p>
+</header>
+
+<main>
+  <div id="survey-wrap">
+
+    <div class="intro-card">
+      Please offer your observations on the following statements.
+      <strong>Rate yourself on a scale of 1 to 5</strong>, where
+      <strong>5 = "Strongly Agree"</strong> and <strong>1 = "Strongly Disagree."</strong>
+      All fields marked <span class="req">*</span> are required.
+    </div>
+
+    <form id="survey-form" novalidate>
+
+      <!-- Name -->
+      <div class="section-heading">
+        <div class="pip pip-teal"></div>
+        <h2>Your Information</h2>
+      </div>
+      <div class="card">
+        <label class="q-label" for="name">Your full name <span class="req">*</span></label>
+        <input class="name-input" type="text" id="name" name="name" placeholder="First and Last Name" autocomplete="name" required />
+      </div>
+
+      <!-- Self-Assessment -->
+      <div class="section-heading">
+        <div class="pip pip-pink"></div>
+        <h2>Self-Assessment</h2>
+      </div>
+
+      <!-- Q1 -->
+      <div class="card">
+        <label class="q-label">1. I consider myself a Board member who is engaged in the work of the organization. <span class="req">*</span></label>
+        <div class="likert-row" id="q1">
+          <div class="likert-option"><input type="radio" name="q1" id="q1_1" value="1" required/><label for="q1_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q1" id="q1_2" value="2"/><label for="q1_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q1" id="q1_3" value="3"/><label for="q1_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q1" id="q1_4" value="4"/><label for="q1_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q1" id="q1_5" value="5"/><label for="q1_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="card">
+        <label class="q-label">2. I have a solid understanding of the core programs of the organization. <span class="req">*</span></label>
+        <div class="likert-row" id="q2">
+          <div class="likert-option"><input type="radio" name="q2" id="q2_1" value="1" required/><label for="q2_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q2" id="q2_2" value="2"/><label for="q2_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q2" id="q2_3" value="3"/><label for="q2_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q2" id="q2_4" value="4"/><label for="q2_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q2" id="q2_5" value="5"/><label for="q2_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="card">
+        <label class="q-label">3. I am literate about the finances of our organization, understanding both our strengths and potential vulnerabilities. <span class="req">*</span></label>
+        <div class="likert-row" id="q3">
+          <div class="likert-option"><input type="radio" name="q3" id="q3_1" value="1" required/><label for="q3_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q3" id="q3_2" value="2"/><label for="q3_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q3" id="q3_3" value="3"/><label for="q3_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q3" id="q3_4" value="4"/><label for="q3_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q3" id="q3_5" value="5"/><label for="q3_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="card">
+        <label class="q-label">4. I am an effective fundraiser for the organization. I make my own annual contribution and regularly ask and/or introduce donor prospects to the organization. <span class="req">*</span></label>
+        <div class="likert-row" id="q4">
+          <div class="likert-option"><input type="radio" name="q4" id="q4_1" value="1" required/><label for="q4_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q4" id="q4_2" value="2"/><label for="q4_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q4" id="q4_3" value="3"/><label for="q4_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q4" id="q4_4" value="4"/><label for="q4_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q4" id="q4_5" value="5"/><label for="q4_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="card">
+        <label class="q-label">5. I am an active participant in strategic discussions, offering insights or asking thoughtful questions. <span class="req">*</span></label>
+        <div class="likert-row" id="q5">
+          <div class="likert-option"><input type="radio" name="q5" id="q5_1" value="1" required/><label for="q5_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q5" id="q5_2" value="2"/><label for="q5_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q5" id="q5_3" value="3"/><label for="q5_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q5" id="q5_4" value="4"/><label for="q5_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q5" id="q5_5" value="5"/><label for="q5_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="card">
+        <label class="q-label">6. I make valuable contributions to the committee(s) on which I serve. <span class="req">*</span></label>
+        <div class="likert-row" id="q6">
+          <div class="likert-option"><input type="radio" name="q6" id="q6_1" value="1" required/><label for="q6_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q6" id="q6_2" value="2"/><label for="q6_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q6" id="q6_3" value="3"/><label for="q6_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q6" id="q6_4" value="4"/><label for="q6_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q6" id="q6_5" value="5"/><label for="q6_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="card">
+        <label class="q-label">7. In the past year I have brought new assets to the organization (e.g., experts, volunteers, donors, corporate sponsors, etc.) <span class="req">*</span></label>
+        <div class="likert-row" id="q7">
+          <div class="likert-option"><input type="radio" name="q7" id="q7_1" value="1" required/><label for="q7_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q7" id="q7_2" value="2"/><label for="q7_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q7" id="q7_3" value="3"/><label for="q7_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q7" id="q7_4" value="4"/><label for="q7_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q7" id="q7_5" value="5"/><label for="q7_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="card">
+        <label class="q-label">8. I am deeply passionate about the mission. <span class="req">*</span></label>
+        <div class="likert-row" id="q8">
+          <div class="likert-option"><input type="radio" name="q8" id="q8_1" value="1" required/><label for="q8_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q8" id="q8_2" value="2"/><label for="q8_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q8" id="q8_3" value="3"/><label for="q8_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q8" id="q8_4" value="4"/><label for="q8_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q8" id="q8_5" value="5"/><label for="q8_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="card">
+        <label class="q-label">9. I have been an enthusiastic public ambassador for the organization. <span class="req">*</span></label>
+        <div class="likert-row" id="q9">
+          <div class="likert-option"><input type="radio" name="q9" id="q9_1" value="1" required/><label for="q9_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q9" id="q9_2" value="2"/><label for="q9_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q9" id="q9_3" value="3"/><label for="q9_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q9" id="q9_4" value="4"/><label for="q9_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q9" id="q9_5" value="5"/><label for="q9_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="card">
+        <label class="q-label">10. I make every effort to attend regularly scheduled Board meetings. <span class="req">*</span></label>
+        <div class="likert-row" id="q10">
+          <div class="likert-option"><input type="radio" name="q10" id="q10_1" value="1" required/><label for="q10_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q10" id="q10_2" value="2"/><label for="q10_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q10" id="q10_3" value="3"/><label for="q10_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q10" id="q10_4" value="4"/><label for="q10_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q10" id="q10_5" value="5"/><label for="q10_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q11 -->
+      <div class="card">
+        <label class="q-label">11. I read and respond to emails from the Executive Director. <span class="req">*</span></label>
+        <div class="likert-row" id="q11">
+          <div class="likert-option"><input type="radio" name="q11" id="q11_1" value="1" required/><label for="q11_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q11" id="q11_2" value="2"/><label for="q11_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q11" id="q11_3" value="3"/><label for="q11_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q11" id="q11_4" value="4"/><label for="q11_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q11" id="q11_5" value="5"/><label for="q11_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- Q12 -->
+      <div class="card">
+        <label class="q-label">12. I frequently encourage the Executive Director through my words and actions. <span class="req">*</span></label>
+        <div class="likert-row" id="q12">
+          <div class="likert-option"><input type="radio" name="q12" id="q12_1" value="1" required/><label for="q12_1"><span class="likert-num">1</span><span class="likert-desc">Strongly<br>Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q12" id="q12_2" value="2"/><label for="q12_2"><span class="likert-num">2</span><span class="likert-desc">Disagree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q12" id="q12_3" value="3"/><label for="q12_3"><span class="likert-num">3</span><span class="likert-desc">Neutral</span></label></div>
+          <div class="likert-option"><input type="radio" name="q12" id="q12_4" value="4"/><label for="q12_4"><span class="likert-num">4</span><span class="likert-desc">Agree</span></label></div>
+          <div class="likert-option"><input type="radio" name="q12" id="q12_5" value="5"/><label for="q12_5"><span class="likert-num">5</span><span class="likert-desc">Strongly<br>Agree</span></label></div>
+        </div>
+      </div>
+
+      <!-- SharePoint -->
+      <div class="section-heading">
+        <div class="pip pip-green"></div>
+        <h2>SharePoint</h2>
+      </div>
+
+      <div class="card">
+        <label class="q-label">Can you access the Board's SharePoint home page? <span class="req">*</span></label>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:.9rem;">
+          <a href="https://theharbourinc.sharepoint.com/sites/HarbourBoardofDirectors/SitePages/Home.aspx" target="_blank" rel="noopener" style="color:var(--teal);">theharbourinc.sharepoint.com → Harbour Board of Directors</a>
+        </p>
+        <div class="yn-row">
+          <div class="yn-option"><input type="radio" name="sp_access" id="sp_yes" value="Yes" required/><label for="sp_yes">Yes</label></div>
+          <div class="yn-option"><input type="radio" name="sp_access" id="sp_no" value="No"/><label for="sp_no">Not currently</label></div>
+        </div>
+      </div>
+
+      <div class="card" id="sp-freq-card" style="display:none;">
+        <label class="q-label" for="sp_freq">If yes, how often do you visit the SharePoint site?</label>
+        <input class="text-input" type="text" id="sp_freq" name="sp_freq" placeholder="e.g., once a week, twice a month, a few times a year…"/>
+      </div>
+
+      <!-- Looking Ahead -->
+      <div class="section-heading">
+        <div class="pip pip-gold"></div>
+        <h2>Looking Ahead</h2>
+      </div>
+
+      <div class="card">
+        <label class="q-label" for="q_ahead">What do you hope to accomplish on the Board for the next two years? Are there any roles or committees you are interested in?</label>
+        <textarea id="q_ahead" name="q_ahead" placeholder="Share your thoughts…"></textarea>
+      </div>
+
+      <div class="card">
+        <label class="q-label" for="q_needs">What do you need to be successful in the coming year?</label>
+        <textarea id="q_needs" name="q_needs" placeholder="Share your thoughts…"></textarea>
+      </div>
+
+      <div class="card">
+        <label class="q-label" for="q_other">Is there anything else you would like to add?</label>
+        <textarea id="q_other" name="q_other" placeholder="Any additional comments…"></textarea>
+      </div>
+
+      <!-- Values display -->
+      <div class="section-heading">
+        <div class="pip pip-teal"></div>
+        <h2>The Harbour Board of Directors Values</h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card vc-1" data-num="1"><h3>Welcoming &amp; Collaborative</h3><p>Create an environment that utilizes the desires, knowledge &amp; talents of everyone</p></div>
+        <div class="value-card vc-2" data-num="2"><h3>Balanced</h3><p>Drive decisions that balance achieving our mission with our fiscal responsibilities</p></div>
+        <div class="value-card vc-3" data-num="3"><h3>Generous</h3><p>Model &amp; encourage generosity of time, talent and treasure</p></div>
+        <div class="value-card vc-4" data-num="4"><h3>Empowering</h3><p>Strive to ensure everyone has the resources &amp; tools needed to thrive in their roles</p></div>
+        <div class="value-card vc-5" data-num="5"><h3>Respectful</h3><p>Demonstrate respect for others and assume best intentions</p></div>
+        <div class="value-card vc-6" data-num="6"><h3>Responsible &amp; Accountable</h3><p>Be responsible stewards of our governing body, assets, financial resources &amp; the community we serve</p></div>
+      </div>
+
+      <div class="submit-area">
+        <button type="submit" class="submit-btn" id="submit-btn">Submit Assessment</button>
+        <div id="status-msg"></div>
+      </div>
+
+    </form>
+  </div><!-- /survey-wrap -->
+
+  <div id="thankyou">
+    <div class="checkmark">✓</div>
+    <h2>Thank you!</h2>
+    <p>Your assessment has been received.<br>We appreciate your thoughtful participation.</p>
+  </div>
+
+</main>
+
+<footer>
+  &copy; 2026 The Harbour &nbsp;·&nbsp; Board Assessment Survey
+</footer>
+
+<script>
+  // ── Replace this with your deployed Google Apps Script URL ──
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwiF8nwRMoUFfT-7mRI_s3tTUfvy5XvqJbBYfFyDS9B4MnI72MCqvqr48aWe19oLF48NQ/exec';
+
+  // Show/hide SharePoint frequency field
+  document.querySelectorAll('input[name="sp_access"]').forEach(el => {
+    el.addEventListener('change', () => {
+      document.getElementById('sp-freq-card').style.display =
+        document.querySelector('input[name="sp_access"]:checked')?.value === 'Yes' ? 'block' : 'none';
+    });
+  });
+
+  // Form submission
+  document.getElementById('survey-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form   = e.target;
+    const btn    = document.getElementById('submit-btn');
+    const status = document.getElementById('status-msg');
+
+    // ── Validate required fields ──
+    const name = form.name.value.trim();
+    if (!name) { showError('Please enter your name.'); return; }
+
+    const likertQs = ['q1','q2','q3','q4','q5','q6','q7','q8','q9','q10','q11','q12'];
+    for (const q of likertQs) {
+      if (!form[q]?.value) {
+        showError(`Please answer question ${q.replace('q','')}.`);
+        document.getElementById(q)?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+    if (!form.sp_access?.value) { showError('Please answer the SharePoint access question.'); return; }
+
+    // ── Build payload ──
+    const payload = {
+      timestamp:  new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' }),
+      name,
+      q1:  form.q1.value,
+      q2:  form.q2.value,
+      q3:  form.q3.value,
+      q4:  form.q4.value,
+      q5:  form.q5.value,
+      q6:  form.q6.value,
+      q7:  form.q7.value,
+      q8:  form.q8.value,
+      q9:  form.q9.value,
+      q10: form.q10.value,
+      q11: form.q11.value,
+      q12: form.q12.value,
+      sp_access: form.sp_access.value,
+      sp_freq:   form.sp_freq?.value.trim() || '',
+      q_ahead:   form.q_ahead.value.trim(),
+      q_needs:   form.q_needs.value.trim(),
+      q_other:   form.q_other.value.trim(),
+    };
+
+    btn.disabled = true;
+    status.className = 'loading';
+    status.textContent = 'Submitting your assessment…';
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode:   'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      // no-cors means we can't read the response, but if no error thrown, assume OK
+      document.getElementById('survey-wrap').style.display = 'none';
+      document.getElementById('thankyou').style.display    = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      showError('There was a problem submitting your response. Please try again or contact the administrator.');
+      btn.disabled = false;
+    }
+
+    function showError(msg) {
+      status.className = 'error';
+      status.textContent = msg;
+    }
+  });
+</script>
+</body>
+</html>
