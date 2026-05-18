@@ -582,6 +582,15 @@
         <textarea id="q_other" name="q_other" placeholder="Any additional comments…"></textarea>
       </div>
 
+      <!-- Governance call question -->
+      <div class="card">
+        <label class="q-label">Our goal is to ensure we engage in meaningful dialogue with our Board members. Would you be open to a quick call with a member of the Governance Committee to discuss your feedback?</label>
+        <div class="yn-row">
+          <div class="yn-option"><input type="radio" name="gov_call" id="gov_yes" value="Yes"/><label for="gov_yes">Yes</label></div>
+          <div class="yn-option"><input type="radio" name="gov_call" id="gov_no" value="No"/><label for="gov_no">No</label></div>
+        </div>
+      </div>
+
       <!-- Values display -->
       <div class="section-heading">
         <div class="pip pip-teal"></div>
@@ -665,6 +674,7 @@
       q_ahead:   form.q_ahead.value.trim(),
       q_needs:   form.q_needs.value.trim(),
       q_other:   form.q_other.value.trim(),
+      gov_call:  form.gov_call?.value || '',
     };
 
     btn.disabled = true;
